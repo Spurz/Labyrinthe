@@ -1,0 +1,188 @@
+tresor
+
+coffre ouvrir (vide, piégé,trésor)
+monstre fuir / combattre (resolation aléatoire du combat pondéré au nombre de trésor)
+
+pice carré (départ, neutre ou sortie)
+porte
+
+personnage (point de vie)
+
+donjon
+
+sortie
+entrée
+
+
+
+
+
+
+donjon
+IDENTIFIANT
+METHODE STATIC Liste > retounrne tous les donjons
+Methode GetNom > retourne le nom du donjon instancié
+Methode setNom > modifie le nom du donjon
+
+$oMonjoliDonjon = (1);
+echo "Mon Donjon s'appelle". $oMonjoliDonjon->GetNom(); // Mon joli Donjon
+//changer le nom 
+$oMonjoliDonjon = 
+
+http://private-5ae5d-wadvomnibox.apiary-mock.com
+
+
+
+{
+    "id_piece": 7,
+    ""id_pieces_visitables":[
+    { "id_piece":9 },
+    { "id_piece":5 },
+    { "id_piece":42 }
+    ]
+}
+
+{
+    "id_piece": 7,
+    "portes":[9,5,42],
+}
+
+
+- ROUTE A EFFECTUER
+
+POST -->  /perso/entree
+POST -->  /perso/piece
+POST -->  /perso/piece/monstre/fuir
+POST -->  /perso/piece/revenir
+POST -->  /perso/piece/monstre 
+GET  -->  /Donjon/perso 
+GET  -->  /perso/piece/coffre
+POST -->  /perso/piece/coffre/ouvrir
+
+# Créer un personnage, points de vie par défaut pour tous, 100
+PUT /perso
+## ENTREE
+{
+  "nom_perso": "Guillaume"
+}
+## SORTIE
+{
+  "id_perso": 42,
+  "nom_perso": "Guillaume",
+  "pdv_perso": 100
+}
+
+# Place un joueur à l'entrée du donjon
+POST /perso/@id_perso/donjon/@id_donjon
+## SORTIE
+{
+  "id_piece": 56,
+  "id_piece_possibles": [89,43,52]
+}
+
+# Si il peut (vérifier la possibilité), le joueur entre dans une piece
+POST /perso/@id_perso/piece/@id_piece
+## ENTREE
+{
+  "id_piece_precedente" : 56
+}
+## SORTIE
+### PIECE VIDE
+{
+  "id_piece": 72,
+  "id_piece_possibles": [89,43,52]
+  "id_piece_precedente": 56
+}
+### PIECE Contient un monstre et/ou un coffre
+{
+  "id_piece": 72,
+  "id_piece_possibles": [89,43,52]
+  "id_piece_precedente": 56
+  "monstre": {
+    "id_monstre": 876,
+    "nom_monstre": "Casper le gentil Fantôme",
+    "pdv_monstre": 100
+  },
+  "id_coffre": 987
+}
+
+# Si l'utilisateur ouvre un coffre
+POST /perso/@id_perso/piece/@id_piece/coffre/@id_coffre/ouvrir
+## ENTREE
+{
+  "id_piece_precedente" : 56
+}
+## SORTIE
+{
+  "id_coffre" : 987,
+  "piege_coffre" : 12, # Si 0 non piégé, sinon nombre de points de vie retirés au joueur
+  # Uniquement s'il y a un trésor
+  "tresor": {
+    "id_tresor": 23,
+    "nom_tresor": "Excalibur"
+  }
+}
+
+# Donne les informations sur le coffre
+GET /perso/@id_perso/piece/@id_piece/coffre/@id_coffre
+## ENTREE
+{
+  "id_piece_precedente" : 56
+}
+## SORTIE
+{
+  "id_coffre" : 987,
+  "piege_coffre" : 12, # Si 0 non piégé, sinon nombre de points de vie retirés au joueur
+  # Uniquement s'il y a un trésor
+  "tresor": {
+    "id_tresor": 23,
+    "nom_tresor": "Excalibur"
+  }
+}
+
+# Si l'utilisateur choisi de combattre
+POST /perso/@id_perso/piece/@id_piece/monstre/@id_monstre/combattre
+## ENTREE
+{
+  "id_piece_precedente" : 56
+}
+## SORTIE
+{
+  "pdv_perso": 80 # Si 0 perdu
+}
+
+# Si l'utilisateur fuit, on lui enlève des points de vie aléatoire entre 1 et 10 (si le temps ajouter + on fuit, + on perd)
+POST /perso/@id_perso/piece/@id_piece/monstre/@id_monstre/fuir
+## ENTREE
+{
+  "id_piece_precedente" : 56
+}
+## SORTIE
+{
+  "pdv_perso": 70
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
